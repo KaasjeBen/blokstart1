@@ -17,7 +17,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
+    route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
     route::get('/portfolio/{id}', [PortfolioController::class, 'show'])->name('portfolio.show');
+    route::post('/portfolio', [PortfolioController::class, 'store'])->name('portfolio.store');
 });
 
 

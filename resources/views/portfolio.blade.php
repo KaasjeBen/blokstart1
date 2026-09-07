@@ -1,7 +1,7 @@
 <x-app-layout>
 
-    <x-nav-link :href="route('portfolio.index')" :active="request()->routeIs('portfolio.index')">
-                            {{ __('Portfolio') }}
+    <x-nav-link :href="route('portfolio.create')" :active="request()->routeIs('portfolio.create')">
+                            {{ __('create portfolio') }}
                         </x-nav-link>
 
     <div class="py-12">
