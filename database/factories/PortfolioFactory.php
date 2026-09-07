@@ -18,7 +18,7 @@ class PortfolioFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->interger(),
+            'user_id' => $this->faker->numberBetween(1, 100),
             'name' => $this->faker->word(),
             'description' => $this->faker->sentence(),
             'image' => $this->faker->imageUrl(),
