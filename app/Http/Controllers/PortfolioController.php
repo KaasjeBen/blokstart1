@@ -11,7 +11,8 @@ class PortfolioController extends Controller
      */
     public function index()
     {
-        //
+        $portfolios = \App\Models\Portfolio::all();
+        return view('portfolio', compact('portfolios'));
     }
 
     /**
@@ -35,7 +36,8 @@ class PortfolioController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $portfolio = \App\Models\Portfolio::findOrFail($id);
+        return view('portfolio_show', compact('portfolio'));
     }
 
     /**

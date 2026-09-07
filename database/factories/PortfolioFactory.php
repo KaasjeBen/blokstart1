@@ -19,7 +19,7 @@ class PortfolioFactory extends Factory
     {
         return [
             'user_id' => $this->faker->numberBetween(1, 100),
-            'name' => $this->faker->word(),
+            'title' => $this->faker->word(),
             'description' => $this->faker->sentence(),
             'image' => $this->faker->imageUrl(),
             'email' => $this->faker->email(),

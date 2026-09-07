@@ -14,10 +14,10 @@ class Portfolio extends Model
      *
      * @var array<int, string>
      */
-    
+
     protected $fillable = [
         'user_id',
-        'name',
+        'title',
         'description',
         'image',
         'email',
