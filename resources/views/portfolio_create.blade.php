@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
-                <form method="POST" action="{{ route('portfolio.store') }}">
+                <form method="POST" action="{{ route('portfolio.store') }}" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-4">
@@ -22,11 +22,10 @@
                             type="text"
                             value="{{ old('title') }}"
                             required
-                            class="mt-1 block w-full rounded-md border-gray-300"
-                        >
+                            class="mt-1 block w-full rounded-md border-gray-300">
 
                         @error('title')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -39,29 +38,61 @@
                             id="description"
                             name="description"
                             rows="5"
-                            class="mt-1 block w-full rounded-md border-gray-300"
-                        >{{ old('description') }}</textarea>
+                            class="mt-1 block w-full rounded-md border-gray-300">{{ old('description') }}</textarea>
 
                         @error('description')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="mb-4">
-                        <label for="url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            URL
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Email
                         </label>
 
                         <input
-                            id="url"
-                            name="url"
-                            type="url"
-                            value="{{ old('url') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300"
-                        >
+                            id="email"
+                            name="email"
+                            type="email"
+                            value="{{ old('email') }}"
+                            class="mt-1 block w-full rounded-md border-gray-300">
 
-                        @error('url')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @error('email')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Phone
+                        </label>
+
+                        <input
+                            id="phone"
+                            name="phone"
+                            type="text"
+                            value="{{ old('phone') }}"
+                            class="mt-1 block w-full rounded-md border-gray-300">
+
+                        @error('phone')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Image
+                        </label>
+
+                        <input
+                            id="image"
+                            name="image"
+                            type="file"
+                            accept="image/*"
+                            class="mt-1 block w-full rounded-md border-gray-300">
+
+                        @error('image')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 

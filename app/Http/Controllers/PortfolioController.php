@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Portfolio;
 use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PortfolioController extends Controller
 {
@@ -12,7 +14,8 @@ class PortfolioController extends Controller
      */
     public function index()
     {
-        $portfolios = \App\Models\Portfolio::all();
+        $portfolios = Portfolio::all();
+
         return view('portfolio', compact('portfolios'));
     }
 
@@ -37,7 +40,7 @@ class PortfolioController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
-        $portfolio = new \App\Models\Portfolio();
+        $portfolio = new Portfolio;
         $portfolio->user_id = Auth::id();
         $portfolio->title = $request->input('title');
         $portfolio->description = $request->input('description');
@@ -45,8 +48,7 @@ class PortfolioController extends Controller
         $portfolio->phone = $request->input('phone');
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('public/images');
-            $portfolio->image = basename($imagePath);
+            $portfolio->image = $request->file('image')->store('images', 'public');
         }
 
         $portfolio->save();
@@ -59,7 +61,8 @@ class PortfolioController extends Controller
      */
     public function show(string $id)
     {
-        $portfolio = \App\Models\Portfolio::findOrFail($id);
+        $portfolio = Portfolio::findOrFail($id);
+
         return view('portfolio_show', compact('portfolio'));
     }
 
@@ -68,7 +71,9 @@ class PortfolioController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $portfolio = Portfolio::findOrFail($id);
+
+        return view('portfolio_edit', compact('portfolio'));
     }
 
     /**
@@ -76,7 +81,30 @@ class PortfolioController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $portfolio = Portfolio::findOrFail($id);
+        $portfolio->title = $request->input('title');
+        $portfolio->description = $request->input('description');
+        $portfolio->email = $request->input('email');
+        $portfolio->phone = $request->input('phone');
+
+        if ($request->hasFile('image')) {
+            if ($portfolio->image) {
+                Storage::disk('public')->delete($portfolio->image);
+            }
+            $portfolio->image = $request->file('image')->store('images', 'public');
+        }
+
+        $portfolio->save();
+
+        return redirect()->route('portfolio.index')->with('success', 'Portfolio updated successfully.');
     }
 
     /**
@@ -84,6 +112,9 @@ class PortfolioController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $portfolio = Portfolio::findOrFail($id);
+        $portfolio->delete();
+
+        return redirect()->route('portfolio.index')->with('success', 'Portfolio deleted successfully.');
     }
 }
