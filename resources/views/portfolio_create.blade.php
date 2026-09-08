@@ -80,6 +80,35 @@
                     </div>
 
                     <div class="mb-4">
+                        <fieldset>
+                            <legend class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Tags
+                            </legend>
+
+                            <div class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                @foreach ($availableTags as $tagValue => $tagLabel)
+                                <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                    <input
+                                        type="checkbox"
+                                        name="tags[]"
+                                        value="{{ $tagValue }}"
+                                        @checked(in_array($tagValue, old('tags', []), true))
+                                        class="rounded border-gray-300">
+                                    {{ $tagLabel }}
+                                </label>
+                                @endforeach
+                            </div>
+
+                            @error('tags')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                            @error('tags.*')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </fieldset>
+                    </div>
+
+                    <div class="mb-4">
                         <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Image
                         </label>

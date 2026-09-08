@@ -18,11 +18,16 @@
                     <p>{{ $portfolio->phone }}</p>
                     <p>{{ $portfolio->email }}</p>
                     <p>{{ $portfolio->description }}</p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        @foreach ($portfolio->tags ?? [] as $tag)
+                        <span class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-200">{{ \App\Models\Portfolio::availableTags()[$tag] ?? $tag }}</span>
+                        @endforeach
+                    </div>
                 </div>
             </div>
             <div class="mt-4">
                 <a href="{{ route('portfolio.edit', $portfolio->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
-                <form action="{{ route('portfolio.destroy', $portfolio->id) }}" method="POST" class="inline-block">
+                <form action="{{ route('portfolio.destroy', $portfolio->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this portfolio item?');" class="inline-block">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>

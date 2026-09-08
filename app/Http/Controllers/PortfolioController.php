@@ -6,17 +6,27 @@ use App\Models\Portfolio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class PortfolioController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $portfolios = Portfolio::all();
+        $availableTags = Portfolio::availableTags();
+        $selectedTag = $request->input('tag');
 
-        return view('portfolio', compact('portfolios'));
+        $request->validate([
+            'tag' => ['nullable', Rule::in(array_keys($availableTags))],
+        ]);
+
+        $portfolios = Portfolio::query()
+            ->when($selectedTag, fn($query) => $query->whereJsonContains('tags', $selectedTag))
+            ->get();
+
+        return view('portfolio', compact('portfolios', 'availableTags', 'selectedTag'));
     }
 
     /**
@@ -24,7 +34,7 @@ class PortfolioController extends Controller
      */
     public function create()
     {
-        return view('portfolio_create');
+        return view('portfolio_create', ['availableTags' => Portfolio::availableTags()]);
     }
 
     /**
@@ -38,6 +48,8 @@ class PortfolioController extends Controller
             'image' => 'nullable|image|max:2048',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
+            'tags' => ['required', 'array', 'min:1'],
+            'tags.*' => ['string', Rule::in(array_keys(Portfolio::availableTags()))],
         ]);
 
         $portfolio = new Portfolio;
@@ -46,6 +58,7 @@ class PortfolioController extends Controller
         $portfolio->description = $request->input('description');
         $portfolio->email = $request->input('email');
         $portfolio->phone = $request->input('phone');
+        $portfolio->tags = $request->input('tags');
 
         if ($request->hasFile('image')) {
             $portfolio->image = $request->file('image')->store('images', 'public');
@@ -73,7 +86,10 @@ class PortfolioController extends Controller
     {
         $portfolio = Portfolio::findOrFail($id);
 
-        return view('portfolio_edit', compact('portfolio'));
+        return view('portfolio_edit', [
+            'portfolio' => $portfolio,
+            'availableTags' => Portfolio::availableTags(),
+        ]);
     }
 
     /**
@@ -87,6 +103,8 @@ class PortfolioController extends Controller
             'image' => 'nullable|image|max:2048',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
+            'tags' => ['required', 'array', 'min:1'],
+            'tags.*' => ['string', Rule::in(array_keys(Portfolio::availableTags()))],
         ]);
 
         $portfolio = Portfolio::findOrFail($id);
@@ -94,6 +112,7 @@ class PortfolioController extends Controller
         $portfolio->description = $request->input('description');
         $portfolio->email = $request->input('email');
         $portfolio->phone = $request->input('phone');
+        $portfolio->tags = $request->input('tags');
 
         if ($request->hasFile('image')) {
             if ($portfolio->image) {

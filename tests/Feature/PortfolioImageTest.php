@@ -24,6 +24,7 @@ class PortfolioImageTest extends TestCase
             'description' => 'A portfolio description',
             'email' => 'portfolio@example.com',
             'phone' => '123456789',
+            'tags' => ['web-design'],
             'image' => $image,
         ]);
 
@@ -56,6 +57,7 @@ class PortfolioImageTest extends TestCase
             'description' => $portfolio->description,
             'email' => $portfolio->email,
             'phone' => $portfolio->phone,
+            'tags' => $portfolio->tags,
             'image' => UploadedFile::fake()->image('replacement.jpg'),
         ]);
 

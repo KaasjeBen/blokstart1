@@ -24,6 +24,7 @@ class PortfolioFactory extends Factory
             'image' => $this->faker->imageUrl(),
             'email' => $this->faker->email(),
             'phone' => $this->faker->phoneNumber(),
+            'tags' => [$this->faker->randomElement(array_keys(Portfolio::availableTags()))],
         ];
     }
 }
