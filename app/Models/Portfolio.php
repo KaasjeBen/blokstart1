@@ -44,4 +44,15 @@ class Portfolio extends Model
     {
         return self::AVAILABLE_TAGS;
     }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (! $this->image) {
+            return null;
+        }
+
+        return str_starts_with($this->image, 'images/')
+            ? asset('storage/'.$this->image)
+            : asset($this->image);
+    }
 }

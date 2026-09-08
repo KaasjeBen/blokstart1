@@ -9,7 +9,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="portfolio-panel overflow-hidden">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form action="{{ route('portfolio.update', $portfolio->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -62,7 +62,7 @@
                             <label for="image" class="block text-gray-700 dark:text-gray-300">Image:</label>
                             <input type="file" name="image" id="image" accept="image/*" class="w-full border border-gray-300 rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300">
                             @if ($portfolio->image)
-                                <img src="{{ asset('storage/' . $portfolio->image) }}" alt="Current Image" class="mt-2 w-32 h-32 object-cover">
+                                <img src="{{ $portfolio->image_url }}" alt="Current Image" class="mt-2 w-32 h-32 object-cover">
                             @endif
                         </div>
                         <div class="flex justify-end">

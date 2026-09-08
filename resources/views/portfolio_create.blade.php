@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
+            <div class="portfolio-panel p-6 sm:p-8">
                 <form method="POST" action="{{ route('portfolio.store') }}" enctype="multipart/form-data">
                     @csrf
 
@@ -22,7 +22,7 @@
                             type="text"
                             value="{{ old('title') }}"
                             required
-                            class="mt-1 block w-full rounded-md border-gray-300">
+                            class="mt-1 block w-full rounded border-[#d8d1c4] bg-[#fbfaf7] text-[#172033] focus:border-[#d9944f] focus:ring-[#d9944f] dark:border-[#3b4658] dark:bg-[#1a2130] dark:text-[#e9e5dc]">
 
                         @error('title')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -38,7 +38,7 @@
                             id="description"
                             name="description"
                             rows="5"
-                            class="mt-1 block w-full rounded-md border-gray-300">{{ old('description') }}</textarea>
+                            class="mt-1 block w-full rounded border-[#d8d1c4] bg-[#fbfaf7] text-[#172033] focus:border-[#d9944f] focus:ring-[#d9944f] dark:border-[#3b4658] dark:bg-[#1a2130] dark:text-[#e9e5dc]">{{ old('description') }}</textarea>
 
                         @error('description')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -55,7 +55,7 @@
                             name="email"
                             type="email"
                             value="{{ old('email') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300">
+                            class="mt-1 block w-full rounded border-[#d8d1c4] bg-[#fbfaf7] text-[#172033] focus:border-[#d9944f] focus:ring-[#d9944f] dark:border-[#3b4658] dark:bg-[#1a2130] dark:text-[#e9e5dc]">
 
                         @error('email')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -72,7 +72,7 @@
                             name="phone"
                             type="text"
                             value="{{ old('phone') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300">
+                            class="mt-1 block w-full rounded border-[#d8d1c4] bg-[#fbfaf7] text-[#172033] focus:border-[#d9944f] focus:ring-[#d9944f] dark:border-[#3b4658] dark:bg-[#1a2130] dark:text-[#e9e5dc]">
 
                         @error('phone')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -118,7 +118,7 @@
                             name="image"
                             type="file"
                             accept="image/*"
-                            class="mt-1 block w-full rounded-md border-gray-300">
+                            class="mt-1 block w-full rounded border-[#d8d1c4] bg-[#fbfaf7] text-[#172033] focus:border-[#d9944f] focus:ring-[#d9944f] dark:border-[#3b4658] dark:bg-[#1a2130] dark:text-[#e9e5dc]">
 
                         @error('image')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>

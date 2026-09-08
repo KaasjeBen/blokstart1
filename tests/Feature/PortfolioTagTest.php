@@ -62,4 +62,22 @@ class PortfolioTagTest extends TestCase
         $response->assertRedirect(route('portfolio.index'));
         $this->assertSame(['branding', 'ui-ux'], $portfolio->refresh()->tags);
     }
+
+    public function test_newest_portfolios_are_listed_first(): void
+    {
+        $user = User::factory()->create();
+        $oldPortfolio = Portfolio::factory()->create([
+            'title' => 'Older portfolio',
+            'created_at' => now()->subDay(),
+        ]);
+        $newPortfolio = Portfolio::factory()->create([
+            'title' => 'Newer portfolio',
+            'created_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)->get(route('portfolio.index'));
+
+        $response->assertOk()
+            ->assertSeeInOrder([$newPortfolio->title, $oldPortfolio->title]);
+    }
 }

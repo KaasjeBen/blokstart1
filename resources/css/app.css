@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	body {
+		@apply bg-[#f4f1ea] text-[#172033] dark:bg-[#121722] dark:text-[#e9e5dc];
+	}
+}
+
+@layer components {
+	.portfolio-panel {
+		@apply border border-[#d8d1c4] bg-[#fbfaf7] dark:border-[#303949] dark:bg-[#1a2130];
+	}
+
+	.portfolio-kicker {
+		@apply text-xs font-semibold uppercase tracking-[0.2em] text-[#b06b35] dark:text-[#e8a15b];
+	}
+
+	.portfolio-tag {
+		@apply rounded border border-[#d8d1c4] bg-[#f1ede4] px-2 py-1 text-xs font-medium text-[#4e5868] dark:border-[#3b4658] dark:bg-[#252e3d] dark:text-[#d6d9df];
+	}
+}

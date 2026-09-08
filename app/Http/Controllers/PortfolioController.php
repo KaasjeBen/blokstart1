@@ -23,7 +23,8 @@ class PortfolioController extends Controller
         ]);
 
         $portfolios = Portfolio::query()
-            ->when($selectedTag, fn($query) => $query->whereJsonContains('tags', $selectedTag))
+            ->when($selectedTag, fn ($query) => $query->whereJsonContains('tags', $selectedTag))
+            ->orderByDesc('created_at')
             ->get();
 
         return view('portfolio', compact('portfolios', 'availableTags', 'selectedTag'));

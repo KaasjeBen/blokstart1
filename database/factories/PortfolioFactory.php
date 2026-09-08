@@ -21,7 +21,7 @@ class PortfolioFactory extends Factory
             'user_id' => $this->faker->numberBetween(1, 100),
             'title' => $this->faker->word(),
             'description' => $this->faker->sentence(),
-            'image' => $this->faker->imageUrl(),
+            'image' => 'portfolioStandard.png',
             'email' => $this->faker->email(),
             'phone' => $this->faker->phoneNumber(),
             'tags' => [$this->faker->randomElement(array_keys(Portfolio::availableTags()))],
