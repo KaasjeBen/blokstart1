@@ -109,18 +109,22 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Image
+                        <label for="images" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Images
                         </label>
 
                         <input
-                            id="image"
-                            name="image"
+                            id="images"
+                            name="images[]"
                             type="file"
+                            multiple
                             accept="image/*"
                             class="mt-1 block w-full rounded border-[#d8d1c4] bg-[#fbfaf7] text-[#172033] focus:border-[#d9944f] focus:ring-[#d9944f] dark:border-[#3b4658] dark:bg-[#1a2130] dark:text-[#e9e5dc]">
 
-                        @error('image')
+                        @error('images')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                        @error('images.*')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>

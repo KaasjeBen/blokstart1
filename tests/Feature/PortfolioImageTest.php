@@ -67,4 +67,31 @@ class PortfolioImageTest extends TestCase
         $this->assertFalse(Storage::disk('public')->exists($oldImage));
         $this->assertTrue(Storage::disk('public')->exists($portfolio->image));
     }
+
+    public function test_a_portfolio_can_have_multiple_images_and_is_publicly_viewable(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('portfolio.store'), [
+            'title' => 'Project gallery',
+            'description' => 'Several project views',
+            'tags' => ['development'],
+            'images' => [
+                UploadedFile::fake()->image('screen-one.jpg'),
+                UploadedFile::fake()->image('screen-two.jpg'),
+            ],
+        ]);
+
+        $portfolio = Portfolio::firstOrFail();
+
+        $response->assertRedirect(route('portfolio.index'));
+        $this->assertCount(2, $portfolio->images);
+        $this->assertTrue(Storage::disk('public')->exists($portfolio->images[0]));
+        $this->assertTrue(Storage::disk('public')->exists($portfolio->images[1]));
+        $this->get(route('portfolio.index'))->assertOk()->assertSee($portfolio->title);
+        $this->get(route('portfolio.show', $portfolio->id))->assertOk()->assertSee($portfolio->title);
+        $this->app['auth']->logout();
+        $this->get(route('portfolio.create'))->assertRedirect(route('login'));
+    }
 }

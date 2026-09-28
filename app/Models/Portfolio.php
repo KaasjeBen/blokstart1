@@ -28,6 +28,7 @@ class Portfolio extends Model
         'title',
         'description',
         'image',
+        'images',
         'email',
         'phone',
         'tags',
@@ -37,6 +38,7 @@ class Portfolio extends Model
     {
         return [
             'tags' => 'array',
+            'images' => 'array',
         ];
     }
 
@@ -54,5 +56,28 @@ class Portfolio extends Model
         return str_starts_with($this->image, 'images/')
             ? asset('storage/'.$this->image)
             : asset($this->image);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getImageUrlsAttribute(): array
+    {
+        $paths = $this->imagePaths();
+
+        return array_map(
+            fn (string $path): string => str_starts_with($path, 'images/')
+                ? asset('storage/'.$path)
+                : asset($path),
+            $paths,
+        );
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function imagePaths(): array
+    {
+        return $this->images ?? ($this->image ? [$this->image] : []);
     }
 }

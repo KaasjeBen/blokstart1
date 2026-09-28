@@ -7,7 +7,9 @@
                     <h1 class="mt-2 text-4xl font-semibold tracking-tight text-[#172033] dark:text-[#e9e5dc]">portfolio / werk.</h1>
                     <p class="mt-3 max-w-xl text-sm leading-6 text-[#5d6573] dark:text-[#aeb6c4]">een lijst met portfolio's, ideeën en projecten.</p>
                 </div>
+                @auth
                 <a href="{{ route('portfolio.create') }}" class="inline-flex items-center justify-center rounded border border-[#172033] px-4 py-2 text-sm font-semibold text-[#172033] transition hover:bg-[#172033] hover:text-[#fbfaf7] dark:border-[#e9e5dc] dark:text-[#e9e5dc] dark:hover:bg-[#e9e5dc] dark:hover:text-[#172033]">Create portfolio</a>
+                @endauth
             </div>
 
             <div class="portfolio-panel mb-8 p-5">
@@ -28,8 +30,8 @@
             <div class="grid gap-5 md:grid-cols-2">
                 @foreach ($portfolios as $portfolio)
                 <article class="portfolio-panel overflow-hidden transition hover:-translate-y-0.5 hover:border-[#b9753d]">
-                    @if ($portfolio->image)
-                    <img src="{{ $portfolio->image_url }}" alt="{{ $portfolio->title }}" class="aspect-[16/9] w-full object-cover">
+                    @if ($portfolio->imageUrls)
+                    <img src="{{ $portfolio->imageUrls[0] }}" alt="{{ $portfolio->title }}" class="aspect-[16/9] w-full object-cover">
                     @else
                     <div class="flex aspect-[16/9] items-end bg-[#e8e0d2] p-5 dark:bg-[#242d3b]"><span class="portfolio-kicker">No image</span></div>
                     @endif

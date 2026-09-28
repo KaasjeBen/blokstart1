@@ -39,31 +39,41 @@
                                 <legend class="block text-gray-700 dark:text-gray-300">Tags:</legend>
                                 <div class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
                                     @foreach ($availableTags as $tagValue => $tagLabel)
-                                        <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                                            <input
-                                                type="checkbox"
-                                                name="tags[]"
-                                                value="{{ $tagValue }}"
-                                                @checked(in_array($tagValue, old('tags', $portfolio->tags ?? []), true))
-                                                class="rounded border-gray-300">
-                                            {{ $tagLabel }}
-                                        </label>
+                                    <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <input
+                                            type="checkbox"
+                                            name="tags[]"
+                                            value="{{ $tagValue }}"
+                                            @checked(in_array($tagValue, old('tags', $portfolio->tags ?? []), true))
+                                        class="rounded border-gray-300">
+                                        {{ $tagLabel }}
+                                    </label>
                                     @endforeach
                                 </div>
                                 @error('tags')
-                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
                                 @error('tags.*')
-                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
                             </fieldset>
                         </div>
                         <div class="mb-4">
-                            <label for="image" class="block text-gray-700 dark:text-gray-300">Image:</label>
-                            <input type="file" name="image" id="image" accept="image/*" class="w-full border border-gray-300 rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300">
-                            @if ($portfolio->image)
-                                <img src="{{ $portfolio->image_url }}" alt="Current Image" class="mt-2 w-32 h-32 object-cover">
+                            <label for="images" class="block text-gray-700 dark:text-gray-300">Images:</label>
+                            <input type="file" name="images[]" id="images" accept="image/*" multiple class="w-full border border-gray-300 rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300">
+                            @if ($portfolio->imageUrls)
+                            <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                @foreach ($portfolio->imageUrls as $imageUrl)
+                                <img src="{{ $imageUrl }}" alt="Current project image" class="aspect-square w-full object-cover">
+                                @endforeach
+                            </div>
                             @endif
+                            @error('images')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                            @error('images.*')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div class="flex justify-end">
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update</button>

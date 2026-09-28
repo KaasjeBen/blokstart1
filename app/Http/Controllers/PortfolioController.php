@@ -47,6 +47,8 @@ class PortfolioController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
+            'images' => ['nullable', 'array', 'max:10'],
+            'images.*' => ['image', 'max:2048'],
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'tags' => ['required', 'array', 'min:1'],
@@ -61,8 +63,11 @@ class PortfolioController extends Controller
         $portfolio->phone = $request->input('phone');
         $portfolio->tags = $request->input('tags');
 
-        if ($request->hasFile('image')) {
-            $portfolio->image = $request->file('image')->store('images', 'public');
+        $imagePaths = $this->storeUploadedImages($request);
+
+        if ($imagePaths !== []) {
+            $portfolio->image = $imagePaths[0];
+            $portfolio->images = $imagePaths;
         }
 
         $portfolio->save();
@@ -102,6 +107,8 @@ class PortfolioController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
+            'images' => ['nullable', 'array', 'max:10'],
+            'images.*' => ['image', 'max:2048'],
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'tags' => ['required', 'array', 'min:1'],
@@ -115,11 +122,15 @@ class PortfolioController extends Controller
         $portfolio->phone = $request->input('phone');
         $portfolio->tags = $request->input('tags');
 
-        if ($request->hasFile('image')) {
-            if ($portfolio->image) {
-                Storage::disk('public')->delete($portfolio->image);
+        $imagePaths = $this->storeUploadedImages($request);
+
+        if ($imagePaths !== []) {
+            foreach ($portfolio->imagePaths() as $imagePath) {
+                Storage::disk('public')->delete($imagePath);
             }
-            $portfolio->image = $request->file('image')->store('images', 'public');
+
+            $portfolio->image = $imagePaths[0];
+            $portfolio->images = $imagePaths;
         }
 
         $portfolio->save();
@@ -128,11 +139,43 @@ class PortfolioController extends Controller
     }
 
     /**
+     * @return array<int, string>
+     */
+    private function storeUploadedImages(Request $request): array
+    {
+        $files = $request->file('images', []);
+
+        if ($request->hasFile('image')) {
+            array_unshift($files, $request->file('image'));
+        }
+
+        return array_map(
+            fn ($file): string => $file->store('images', 'public'),
+            $files,
+        );
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         $portfolio = Portfolio::findOrFail($id);
+
+        $request->validate([
+            'title_confirmation' => [
+                'required',
+                'string',
+                Rule::in([$portfolio->title]),
+            ],
+        ], [
+            'title_confirmation.in' => 'The project name does not match.',
+        ]);
+
+        foreach ($portfolio->imagePaths() as $imagePath) {
+            Storage::disk('public')->delete($imagePath);
+        }
+
         $portfolio->delete();
 
         return redirect()->route('portfolio.index')->with('success', 'Portfolio deleted successfully.');

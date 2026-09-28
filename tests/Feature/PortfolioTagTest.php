@@ -80,4 +80,36 @@ class PortfolioTagTest extends TestCase
         $response->assertOk()
             ->assertSeeInOrder([$newPortfolio->title, $oldPortfolio->title]);
     }
+
+    public function test_a_portfolio_cannot_be_deleted_without_matching_title_confirmation(): void
+    {
+        $user = User::factory()->create();
+        $portfolio = Portfolio::factory()->create([
+            'user_id' => $user->id,
+            'title' => 'Project Atlas',
+        ]);
+
+        $response = $this->actingAs($user)->delete(route('portfolio.destroy', $portfolio->id), [
+            'title_confirmation' => 'Project Atlantis',
+        ]);
+
+        $response->assertSessionHasErrors('title_confirmation');
+        $this->assertDatabaseHas('portfolios', ['id' => $portfolio->id]);
+    }
+
+    public function test_a_portfolio_can_be_deleted_with_matching_title_confirmation(): void
+    {
+        $user = User::factory()->create();
+        $portfolio = Portfolio::factory()->create([
+            'user_id' => $user->id,
+            'title' => 'Project Atlas',
+        ]);
+
+        $response = $this->actingAs($user)->delete(route('portfolio.destroy', $portfolio->id), [
+            'title_confirmation' => 'Project Atlas',
+        ]);
+
+        $response->assertRedirect(route('portfolio.index'));
+        $this->assertDatabaseMissing('portfolios', ['id' => $portfolio->id]);
+    }
 }
